@@ -16,21 +16,30 @@ import os
 os.system('cls')
 
 
-def create_numb_list(n):
-    n_list = []
-    for i in range (0, n ):
-        n_list.append(i + 1)
-    return n_list
 
-def all_divisors(n_list):
-    ans_list = [x  for x in num_list if num % x == 0]
+def all_divisors(n):
+    ans_list = [x  for x in range (1, n+1) if n % x == 0]
     return ans_list
 
 
 num = int(input("Введите число для нахождения делителей: "))
-num_list = create_numb_list(num)
-answer_list = all_divisors(num_list)
-print(", ".join(map(str,answer_list)))
+print(", ".join(map(str, all_divisors(num))))
+
+
+
+
+
+##############################################################
+
+# num = int(input("Введите число для нахождения делителей: "))
+# def all_divisors (n):
+#     l_1 = list()
+#     for i in range (1, n + 1):
+#         if n % i == 0:
+#             l_1.append(i)
+#     return l_1
+
+# print (f"Делители для числа {num}: {all_divisors(num)}")
 
 
 

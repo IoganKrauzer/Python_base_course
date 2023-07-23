@@ -31,8 +31,8 @@ print(f"Первая подсказка! Сумма двух чисел: {sum_of
 print(f"Вторая подсказка! Произведение двух чисел: {mult_of_num}")
 
 list_1 = list()
-list_1 = [(x, sum_of_numbers - x) for x in range(1, sum_of_numbers + 1)
+list_1 = [(x, sum_of_numbers - x) for x in range(1, (sum_of_numbers + 1)//2)
           if x * (sum_of_numbers - x) == mult_of_num]
-
+print(list_1)
 print(f"Первое загаданное число: {list_1[0][0]}")
 print(f"Второе загаданное число: {list_1[0][1]}")

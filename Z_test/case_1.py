@@ -6,3 +6,23 @@
 #  1 2 3 4 5
 #  3
 #  -> 1
+import random
+import os
+os.system('cls')
+
+
+
+
+num = 5
+l_list = list()
+for i in range (num):
+    # l_list.append(int(input()))
+    l_list.append(random.randint(1, 9))
+print(l_list)
+
+a = int(input())
+count = 0
+for i in l_list:
+    if a == i:
+        count += 1
+print(count)
