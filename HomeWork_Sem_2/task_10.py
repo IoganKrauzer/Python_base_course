@@ -69,7 +69,7 @@ def find_answer(s_list):                            # функция работ�
 
 
 
-num = 13
+num = int(input("Введите количество монеток на столе: "))
 num_list = fill_list_with_choices(num)  # Решка - True;  Герб - False
 print(num_list)
 

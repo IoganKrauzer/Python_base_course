@@ -5,7 +5,7 @@ from decimal import Decimal
 # import  decimal
 
 
-def num_to_int (n):
+def num_to_int (n):    #обработка числа 
     if n % 1 != 0:
         while n % 1 != 0:
             n *= 10
@@ -14,7 +14,7 @@ def num_to_int (n):
         return n
 
 
-def sum_of_num (n):
+def sum_of_num (n):    #сумма цифр в числе
     sum = 0
     while n > 0:
         sum += n % 10
@@ -22,7 +22,7 @@ def sum_of_num (n):
     return int(sum)
 
 
-def check_number_out(n):
+def check_number_out(n):    # для вывода целого числа без 00. 46.00 => 46
     if n % 1 !=0:
         return n
     else: 

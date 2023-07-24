@@ -27,3 +27,5 @@ print(", ".join(map(str,fin_list[0])))
 print(f"Перечень степеней двойки, не превосходящих число {num}:", end="  ")
 print(", ".join(map(str,fin_list[1])))
 
+########
+

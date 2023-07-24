@@ -17,19 +17,19 @@ os.system('cls')
 
 
 
-def all_divisors(n):
-    ans_list = [x  for x in range (1, n+1) if n % x == 0]
-    return ans_list
+# def all_divisors(n):
+#     ans_list = [x  for x in range (1, n+1) if n % x == 0]
+#     return ans_list
 
 
-num = int(input("Введите число для нахождения делителей: "))
-print("Список делителей: ", ", ".join(map(str, all_divisors(num))))
+# num = int(input("Введите число для нахождения делителей: "))
+# print("Список делителей: ", ", ".join(map(str, all_divisors(num))))
 
 
 
 
 
-##############################################################
+##############---2----ВАРИАНТ------###################
 
 # num = int(input("Введите число для нахождения делителей: "))
 # def all_divisors (n):
