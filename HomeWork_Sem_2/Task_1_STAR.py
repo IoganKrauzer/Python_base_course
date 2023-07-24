@@ -2,7 +2,7 @@
 import os
 os.system('cls')
 from decimal import Decimal
-# import  decimal
+
 
 
 def num_to_int (n):    #обработка числа 
@@ -33,6 +33,7 @@ def check_number_out(n):    # для вывода целого числа без
 num = float(input("Введите число "))
 num = Decimal(str(num))
 print (f"Сумма цифр в числe {check_number_out(num)} равняется: {sum_of_num(num_to_int (num))}")
+
 
 
 
