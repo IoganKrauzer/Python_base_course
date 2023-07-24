@@ -23,7 +23,7 @@ def all_divisors(n):
 
 
 num = int(input("Введите число для нахождения делителей: "))
-print(", ".join(map(str, all_divisors(num))))
+print("Список делителей: ", ", ".join(map(str, all_divisors(num))))
 
 
 
