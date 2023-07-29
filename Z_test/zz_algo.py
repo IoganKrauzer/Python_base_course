@@ -1,7 +1,10 @@
+import random
+import os
+os.system('cls')
 # from decimal import Decimal
-import math
-num = 1.26
-print(math.floor(num))
+# import math
+# num = 1.26
+# print(math.floor(num))
 # num = Decimal(str(num))
 # print(num - int(num))
 # print(num)
@@ -22,3 +25,23 @@ print(math.floor(num))
 # n = int(input('кол-во элементов первого множества ?'))nMassiv = [(int(input(f'{i} - элемент ?'))) for i in range(n)]
 # m = int(input('кол-во элементов второго множества ?'))mMassiv = [(int(input(f'{j} - элемент ?'))) for j in range(m)]
 # print(sorted(list(set(nMassiv+mMassiv))))
+
+
+
+    
+
+
+
+k = 4
+polyn_list_1 = [random.randint(0, 10) for _ in range (random.randint(1, 6))]
+polyn_list_2 = [random.randint(0, 10) for _ in range (random.randint(1, 6))]
+
+
+l_degree = []
+for i in range (len(polyn_list_1) - 1, -1,  - 1):
+    l_degree.append(i)
+
+print(polyn_list_1)
+print(l_degree)
+
+
