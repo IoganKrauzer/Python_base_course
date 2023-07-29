@@ -7,6 +7,17 @@ import os
 os.system('cls')
 
 l_1 = [1, 1, 2, 0, -1, 3, 4, 4]
+l_2 = list()
+
+for _ in l_1:
+    if _ not in l_2:
+        l_2.append(_)
+print(l_2)
+print(len(l_2))
+
+
+
+
 
 
 

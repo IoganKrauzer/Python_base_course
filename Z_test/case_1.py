@@ -14,15 +14,28 @@ os.system('cls')
 
 
 num = 5
-l_list = list()
-for i in range (num):
-    # l_list.append(int(input()))
-    l_list.append(random.randint(1, 9))
+# x = int(input())
+x = 5
+l_list = [] * num
+for i in range (1, num + 1):
+    l_list.append(i)
 print(l_list)
-
-a = int(input())
 count = 0
-for i in l_list:
-    if a == i:
+for k in l_list:
+    if k == x:
         count += 1
 print(count)
+# a = int(input())
+# count = 0
+# for i in l_list:
+#     if a == i:
+#         count += 1
+# print(count)
+
+
+
+# count = 0
+# for i in range(len(list_1)):
+#     if list_1[i] == k:
+#         count += 1
+# print(count)
