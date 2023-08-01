@@ -241,6 +241,7 @@ def sum_of_two_polyn (_list_create_sum_answer):             # На основа�
 
 
 
+
 k = 4
 polyn_list_1 = [random.randint(0, 10) for _ in range (random.randint(2, 6))]   
 polyn_list_2 = [random.randint(0, 10) for _ in range (random.randint(2, 6))]
@@ -289,7 +290,6 @@ list_create_sum_answer = math_oper_with_polyn(list_for_sum_1, list_for_sum_2)
 print("Список со знаками и числами для создания ответа: ", list_create_sum_answer)
 fin_answer = sum_of_two_polyn (list_create_sum_answer)
 print("Ответ: => ", fin_answer)
-
 print("----------------------F--I--N--I--S--H----------------------")
 print("# Данный код написан кровью и потом в течение десятков часов\n# Спасибо за внимание! :)")
 

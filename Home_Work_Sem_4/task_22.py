@@ -48,7 +48,6 @@ l_2 = fill_list(l_2_len)
 set_list = list(set(l_1).intersection(set(l_2)))
 print(f"Первый набор: {l_1}")
 print(f"Второй набор: {l_2}")
-print(*l_2)
 print(f"Числа встречаются в обоих наборах: {set_answer (set_list)}")
 
 
