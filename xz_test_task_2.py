@@ -11,13 +11,12 @@ os.system('cls')
 
 
 
-
-def create_polynomial(polyn_list):                  # ГЕНЕРАЦИЯ МНОГОЧЛЕНА
-    def generate_oper ():                           # ГЕНЕРАЦИЯ СЛУЧАЙНОГО ЗНАКА
+def create_polynomial(polyn_list):
+    def generate_oper ():
         return random.choice(['+', '-'])
     _length = len(polyn_list)
     l_degree = []
-    for i in range (_length - 1, - 1, -1):          # СПИСОК ДЛЯ ВЫСТАВЛЕНИЯ СТЕПЕНЕЙ
+    for i in range (_length - 1, - 1, -1):
         l_degree.append(i)
     print("Список индексов ", l_degree)
     stroke = ""
@@ -28,7 +27,7 @@ def create_polynomial(polyn_list):                  # ГЕНЕРАЦИЯ МНО�
             else:
                 continue
             if i > 0 and i < _length - 1:
-                stroke += f"{generate_oper()}"
+                stroke += f"{generate_oper ()}"
         elif polyn_list[i] == 1 or l_degree[i] == 1:
             if polyn_list[i] == 1 and l_degree[i] != 1:
                 stroke += f"x^{l_degree[i]}"
@@ -48,20 +47,20 @@ def create_polynomial(polyn_list):                  # ГЕНЕРАЦИЯ МНО�
     return stroke
 
 
-def create_indx_lists(polyn_str_l):               # Так как у нас для сложения даны только многочлены
-    _polyn_indx = []                              # То начнем с составления списка индексов
+def create_indx_lists(polyn_str_l):               
+    _polyn_indx = []
     for i in range (len(polyn_str_l) - 1):
         if polyn_str_l[i] == "^":
             _polyn_indx.append(polyn_str_l[i+1])
-        elif polyn_str_l[i] == "x" and polyn_str_l[i+1] !='^':
+        elif polyn_str_l[i - 1] == "x":
             _polyn_indx.append('1')
-        elif polyn_str_l[i + 1] == "=" and polyn_str_l[i] != "x":
+        elif polyn_str_l[i + 1] == "=" :
             _polyn_indx.append('0')
 
-    if _polyn_indx[0] != len(_polyn_indx) - 1:    # Тут идет замена типа данных со стр на инт       
-        _polyn_indx_checked = []                  # Можно было сделать это в блоке выше.
-        k = 0                                     
-        up_degree = int(_polyn_indx[0])           
+    if _polyn_indx[0] != len(_polyn_indx) - 1:             
+        _polyn_indx_checked = []
+        k = 0
+        up_degree = int(_polyn_indx[0])
         while k <= up_degree:
             _polyn_indx_checked.insert(0, k)
             k += 1
@@ -69,7 +68,7 @@ def create_indx_lists(polyn_str_l):               # Так как у нас дл
     return _polyn_indx
     
 
-def create_coef_list (polyn_str_l, indx_list):    # Создаем списки коэффициентов и преобразуем их в тип INT
+def create_coef_list (polyn_str_l, indx_list):
     list_for_coef = []
     _check_count = 0
     _check_char = ['+', '-']
@@ -112,7 +111,7 @@ def create_coef_list (polyn_str_l, indx_list):    # Создаем списки 
     return list_for_coef
 
 
-def indx_list_check(indx_l, list_for_coef):             # Выравниваем и дозаполняем список индексов
+def indx_list_check(indx_l, list_for_coef):
     i = 0
     if len(indx_l) < len(list_for_coef):
         while len(indx_l) !=  len(list_for_coef) :
@@ -121,8 +120,8 @@ def indx_list_check(indx_l, list_for_coef):             # Выравниваем
     return indx_l
 
 
-def coeff_lists_check(polyn_coef_l_1, polyn_coef_l_2):   # Дозаполняем список коэффициентов
-    i = 0                                                #
+def coeff_lists_check(polyn_coef_l_1, polyn_coef_l_2):
+    i = 0
     if len(polyn_coef_l_1) > len(polyn_coef_l_2):
         while len(polyn_coef_l_1) != len(polyn_coef_l_2):
             polyn_coef_l_2.insert(i, 0)
@@ -135,8 +134,8 @@ def coeff_lists_check(polyn_coef_l_1, polyn_coef_l_2):   # Дозаполняе�
         return polyn_coef_l_1
    
 
-def char_list(_polyn_str):                              # Создаем список знаков для каждого многочлена
-    _count_help = 0                                     # Понадобится для функции create_lis_for_sum()
+def char_list(_polyn_str):
+    _count_help = 0
     _char_list = []
     for i in range (len(_polyn_str) -1, -1, -1):
         if _polyn_str[i] == '+' or _polyn_str[i] == '-':
@@ -145,7 +144,7 @@ def char_list(_polyn_str):                              # Создаем спи�
     return _char_list
 
 
-def create_lis_for_sum(_polyn_coef_l, _char_list):     # Создаем список с коэфф и знаками
+def create_lis_for_sum(_polyn_coef_l, _char_list):
     def _count_check(_h_count, _char_l):
         if _h_count < len(_char_l) - 1:
             _h_count += 1
@@ -177,8 +176,8 @@ def create_lis_for_sum(_polyn_coef_l, _char_list):     # Создаем спис
     return _list_for_sum
 
 
-def math_oper_with_polyn(_list_f_sum_1, _list_f_sum_2):     # Создаем список с результатом математ операций
-    _list_create_sum_answer = []                            # двух многочленов
+def math_oper_with_polyn(_list_f_sum_1, _list_f_sum_2):
+    _list_create_sum_answer = []
     for i in range (0, len(_list_f_sum_1), 2):
         if i == 0:
             _list_create_sum_answer.append(_list_f_sum_1[i] + _list_f_sum_2[i])
@@ -193,8 +192,16 @@ def math_oper_with_polyn(_list_f_sum_1, _list_f_sum_2):     # Создаем с�
     return _list_create_sum_answer    
 
 
-def sum_of_two_polyn (_list_create_sum_answer):             # На основании списка создаем многочлен
-    def check_sign(num):                                    # Проверяем знак
+def check_sign(num):
+        _sign = ""
+        if num > 0:
+            _sign = '+'
+            return _sign
+        elif num < 0:
+            return _sign
+
+def sum_of_two_polyn (_list_create_sum_answer):
+    def check_sign(num):
         _sign = ''
         if num > 0:
             _sign = '+'
@@ -202,12 +209,12 @@ def sum_of_two_polyn (_list_create_sum_answer):             # На основа�
         elif num < 0:
             return _sign
 
-    _idex_list = []                                         # Список степеней
+    _idex_list = []
     for t in range(len(_list_create_sum_answer)):
         _idex_list.append(len(_list_create_sum_answer) - 1 - t)
   
     _stroke_answ = ""
-    for i in range(len(_list_create_sum_answer)):           # Создаем строку многочлена
+    for i in range(len(_list_create_sum_answer)):
         if _list_create_sum_answer[i] == 0:
             continue
         elif abs(_list_create_sum_answer[i]) == 1: 
@@ -291,6 +298,17 @@ fin_answer = sum_of_two_polyn (list_create_sum_answer)
 print("Ответ: => ", fin_answer)
 
 print("----------------------F--I--N--I--S--H----------------------")
-print("# Данный код написан кровью и потом в течение десятков часов\n# Спасибо за внимание! :)")
+
+# Данный код написан кровью и потом в течение десятков часов
+#  Спасибо за внимание! :)
+
+
+
+
+
+
+
+
+
 
 
