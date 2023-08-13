@@ -11,3 +11,10 @@
 # Тут может помочь библиотека re
 import os
 os.system('cls')
+
+
+crest_list = [["  ",None,None],
+              [None,'X',None],
+              [None,None,None]]
+
+print(*crest_list)
