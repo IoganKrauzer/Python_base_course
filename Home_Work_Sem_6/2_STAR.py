@@ -48,8 +48,11 @@ def create_d_with_results(m_num):
 
 
 def print_total_result(_d):
-    for key, value in d.items():
-        print(f"{key} : {sum(value)}", value[0], value[1], value[2], value[0] * 3 + value[1])
+    def total_matches(_value):
+        return _value[0] + _value[1] + _value[2]
+        
+    for key, value in _d.items():
+        print(f"{key} : {total_matches(value)}", value[0], value[1], value[2], value[0] * 3 + value[1])
 
 
 
@@ -66,91 +69,3 @@ print_total_result(d)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def print_table(_total_table):
-#     for item, value in _total_table.items():
-#         print(item, value)
-
-
-# def dic_for_input():
-#     _input_dic = {}
-#     flag = True
-#     count_helper = int(input("Введите кол-во матчей: "))
-#     while flag:
-#         list_help_1 = []
-#         list_help_3 = []
-#         list_help_1.append(input("Введите наименование первой команды: "))
-#         list_help_1.append(int(input("Введите наименование кол-во забитых голов: ")))
-#         list_help_1.append(input("Введите наименование второй команды: "))
-#         list_help_1.append(int(input("Введите наименование кол-во забитых голов: ")))
-#         # tupple_1 = tuple(list_help_1[:2])
-#         # tupple_2 = tuple(list_help_1[2:])
-#         # list_help_3.append(tupple_1)
-#         # list_help_3.append(tupple_2)
-#         # print(list_help_3)
-#         _input_dic[count_helper] = list_help_1
-#         count_helper -= 1
-#         if count_helper == 0:
-#             flag = False
-
-#     return _input_dic
-
-
-# def match_report(_total_table, _input_dict ):
-#     for k, v in _input_dict:
-#         for i in range (len(v)):     
-#             num_1 = int(v[1])
-#             num_2 = int(v[3])
-#             if num_1 > num_2:
-#                 num_3 = 3
-#                 num_4 = 0
-#             elif num_1 < num_2:
-#                 num_3 = 0
-#                 num_4 = 3
-#             else:
-#                 num_3 = 1
-        
-
-   
-
-
-
-
-
-# total_table = {}
-# total_table["Наименование команды"] = ["Всего игр", "Побед", "Ничьих", "Поражений", "Всего очков"]
-# total_table["Спартак             "] = [None] * 5
-# total_table["Локомотив           "] = [None] * 5
-# total_table["Зенит               "] = [None] * 5
-# print_table(total_table)
-# input_dict = dic_for_input()
-# print(input_dict)

@@ -112,7 +112,7 @@ def gererate_bot_position(_bot_element, _crest_list):  # Первая позиц
 def player_choice(_crest_list, _player_element):
     _raw = int(input("Введите номер строки: ")) - 1
     _column = int(input("Введите номер столбца: ")) - 1
-    if _crest_list[_raw][_column] == None:           # Если не None, то надо ввести другое значение 
+    if _crest_list[_raw][_column] == None:           
         _crest_list[_raw][_column] = _player_element  
     else:
         flag = True
