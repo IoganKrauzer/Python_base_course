@@ -26,7 +26,7 @@ def count_glass (_stroke):
     for i in _stroke:
         count = 0
         for k in range(len(i)):
-            if i[k] in ['a', 'а', 'у', 'е', 'о', 'я', 'и', 'ю']:
+            if i[k] in ['а', 'у', 'е', 'о', 'я', 'и', 'ю']:
                 count += 1
         _glass_c_l.append(count)
     return _glass_c_l
