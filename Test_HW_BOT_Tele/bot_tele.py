@@ -7,24 +7,30 @@ import sqlite3 as sq
 
 def create_table():
 
-    cur.execute("""CREATE TABLE IF NOT EXISTS users 
-        (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cur.execute("""CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY, 
         second_n TEXT, 
         first_n TEXT
         )""")
 
-    cur.execute("""CREATE TABLE IF NOT EXISTS telephone 
-        (id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER, 
-        tel_number INTEGER,
-        FOREIGN KEY (user_id) REFERENCES users (id)
+    cur.execute("""CREATE TABLE IF NOT EXISTS telephone (
+        id INTEGER PRIMARY KEY,
+        tel_number INTEGER
         )""")
 
-    cur.execute("""CREATE TABLE IF NOT EXISTS relation 
-        (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    cur.execute("""CREATE TABLE IF NOT EXISTS relation (
+        id INTEGER PRIMARY KEY, 
+        relations TEXT
+        )""")
+
+    cur.execute("""CREATE TABLE IF NOT EXISTS contacts (
+        id INTEGER PRIMARY KEY,
         user_id INTEGER,
-        relations TEXT,
-        FOREIGN KEY (user_id) REFERENCES users (id)
+        tel_id INTEGER,
+        rel_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (tel_id) REFERENCES telephone (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (rel_id) REFERENCES relation (id) ON DELETE CASCADE ON UPDATE CASCADE
         )""")
 
  
@@ -32,37 +38,46 @@ def add_into_empty():
 
     cur.execute("SELECT * FROM users")
     if not cur.fetchall():
-        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Царкан', 'Амир')")
-        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Бульчан', 'Марго')")
-        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Свинтий', 'Перуй')")
-        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Массия', 'Тэя')")
+        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Klomsel', 'Anton')")
+        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Bolgan', 'Mirgo')")
+        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Svintel', 'Perui')")
+        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Massaya', 'Telka')")
 
     cur.execute("SELECT * FROM telephone")
     if not cur.fetchall():
-        cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (1, 89257655664)")
-        cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (1, 89108761230)")
-        cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (2, 89163211299)")
-        cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (3, 89031897645)")
-        cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (4, 89104557318)")
+        cur.execute("INSERT INTO telephone (tel_number) VALUES (89257655664)")
+        cur.execute("INSERT INTO telephone (tel_number) VALUES (89108761230)")
+        cur.execute("INSERT INTO telephone (tel_number) VALUES (89163211299)")
+        cur.execute("INSERT INTO telephone (tel_number) VALUES (89031897645)")
+        cur.execute("INSERT INTO telephone (tel_number) VALUES (89104557318)")
 
     cur.execute("SELECT * FROM relation")
     if not cur.fetchall():
-        cur.execute("INSERT INTO relation (user_id, relations) VALUES (4, 'friends')")
-        cur.execute("INSERT INTO relation (user_id, relations) VALUES (2, 'family')")
-        cur.execute("INSERT INTO relation (user_id, relations) VALUES (1, 'work')")
-        cur.execute("INSERT INTO relation (user_id, relations) VALUES (3, 'enemy')")
+        cur.execute("INSERT INTO relation (relations) VALUES ('friends')")
+        cur.execute("INSERT INTO relation (relations) VALUES ('family')")
+        cur.execute("INSERT INTO relation (relations) VALUES ('work')")
+        cur.execute("INSERT INTO relation (relations) VALUES ('enemy')")
+
+    cur.execute("SELECT * FROM contacts")
+    if not cur.fetchall():
+        cur.execute("INSERT INTO contacts (user_id, tel_id, rel_id) VALUES (1, 1, 4)")
+        cur.execute("INSERT INTO contacts (user_id, tel_id, rel_id) VALUES (1, 2, 4)")
+        cur.execute("INSERT INTO contacts (user_id, tel_id, rel_id) VALUES (2, 3, 2)")
+        cur.execute("INSERT INTO contacts (user_id, tel_id, rel_id) VALUES (3, 4, 1)")
+        cur.execute("INSERT INTO contacts (user_id, tel_id, rel_id) VALUES (4, 5, 3)")
 
 
 def show_all():
-    cur.execute("SELECT second_n, first_n, tel_number, relations FROM telephone JOIN users ON telephone.user_id = users.id JOIN relation ON telephone.user_id = relation.user_id ORDER BY second_n ASC")
+    cur.execute("SELECT second_n, first_n, tel_number, relations FROM contacts JOIN users ON contacts.user_id = users.id \
+        JOIN telephone ON contacts.tel_id = telephone.id JOIN relation ON contacts.rel_id = relation.id ORDER BY second_n ASC")
     for row in cur:
         f = '{0:<8} | {1:<8} | {2:<8} | {3:<5}'.format(*row)
         print(f)
 
 
 def add_user():
-    surname = input("Введите фамилию пользователя: ")
-    name = input("Введите имя пользователя: ")
+    surname = input("Введите фамилию пользователя: ").capitalize()
+    name = input("Введите имя пользователя: ").capitalize()
     cur.execute(f"INSERT INTO users VALUES(NULL, '{surname}','{name}')")
     last_id = cur.lastrowid
     con.commit()
@@ -71,10 +86,10 @@ def add_user():
     i = 0
     while i < count_hlp:
         tel = int(input("Введите номер телефона: "))
-        cur.execute(f"INSERT INTO telephone (user_id, tel_number) VALUES ({last_id}, {tel})")
+        cur.execute(f"INSERT INTO telephone (tel_number) VALUES ({last_id}, {tel})")
         i += 1
 
-    print("Кто вам приходится пользователь \n 1 - friends \n 2 - family \n 3 - work \n 4 - enemy")
+    print("Кем вам приходится пользователь \n 1 - friends \n 2 - family \n 3 - work \n 4 - enemy")
     rel_hlp = int(input("Введите цифру: "))
     while True:
         if rel_hlp == 1:
@@ -92,31 +107,85 @@ def add_user():
 
 
 def search_user ():
-    sec_n = input("Введите фамилию пользователя: ")
-    cur.execute(f"SELECT second_n, first_n, tel_number, relations FROM telephone JOIN users ON telephone.user_id = users.id JOIN relation ON telephone.user_id = relation.user_id WHERE second_n = '{sec_n}'")
+    sec_n = input("Введите фамилию пользователя: ").capitalize()
+    cur.execute(f"SELECT second_n, first_n, tel_number, relations FROM contacts JOIN users ON contacts.user_id = users.id \
+        JOIN telephone ON contacts.tel_id = telephone.id JOIN relation ON contacts.rel_id = relation.id WHERE second_n = '{sec_n}'")
     for row in cur:
         f = '{0:<8} | {1:<8} | {2:<8} | {3:<5}'.format(*row)
         print(f)
+  
+
+def update_data():
+    while True:
+        answer = input("В каком поле вы хотите внести изменения?\n 1 - Фамилия\n 2 - Телефон\n 3 - Группа\n 0 - Выход\n ")
+        if answer == '1':
+            sec_n_q = input("Введите фамилию которую хотите изменить: ").capitalize()
+            sec_n = input("Введите новую фамилию пользователя: ").capitalize()
+            cur.execute(f"UPDATE users SET second_n = '{sec_n} WHERE second_n = {sec_n_q}'")
+
+        elif answer == '2':
+            sec_n = input("Введите фамилию пользователя телефон которого хотите изменить: ").capitalize()
+            cur.execute(f"SELECT second_n, first_n, tel_number FROM contacts JOIN users ON contacts.user_id = users.id \
+                JOIN telephone ON contacts.tel_id = telephone.id  WHERE second_n = '{sec_n}'")
+            for row in cur:
+                f = '{0:<8} | {1:<8} | {2:<8}'.format(*row)
+                print(f)
 
 
-def update_tel():
-    surname_h = input("Введите фамилию: ")
-    new_tel = int(input("Введите новый номер телефона: "))
-    cur.execute(f"UPDATE telephone SET tel_number {new_tel} WHERE")
+
+        elif answer == '3':
+            sec_n_q = input("Введите фамилию пользователя группу которого хотите изменить: ").capitalize()
+            res = int(input("Выберите новую группу контакта: \n 1 - friends\n 2 - family\n 3 - work\n 4 - enemy\n "))
+            cur.execute(f"UPDATE contacts SET rel_id = {res} WHERE user_id = (SELECT id FROM users WHERE second_n = '{sec_n_q}')")
+            continue
+        elif answer == '0':
+            break
+    
+    # surname_h = input("Введите фамилию: ")
+    # new_tel = int(input("Введите новый номер телефона: "))
+    # cur.execute(f"UPDATE telephone SET tel_number {new_tel} WHERE")
+
+
+def delete_record():
+    sec_n = input("Введите фамилию пользователя: ").capitalize()
+    cur.execute(f"SELECT second_n, first_n, tel_number, relations FROM contacts JOIN users ON contacts.user_id = users.id \
+        JOIN telephone ON contacts.tel_id = telephone.id JOIN relation ON contacts.rel_id = relation.id WHERE second_n = '{sec_n}'")
+    for row in cur:
+        f = '{0:<8} | {1:<8} | {2:<8} | {3:<5}'.format(*row)
+        print(f)
+    answer = input('Вы точно хотите удалить этого пользователя? Y/N: ').upper()
+    if answer == 'Y':
+        cur.execute("DELETE FROM users WHERE second_n = ?", (f'{sec_n}',))
+    else: 
+        return
+   
+
+def print_info():
+    print("/all => Выводит информацию по контактам")
+    print("/add => Добавляет контакт")
+    print("/del => Удаляет контакт")
+    print("/up => Позволяет внести изменения в контакт")
+    print("/info => Информация по доступным командам")
+    print("/save => Сохранить внесенные изменения")
+    print("/search => Поиск контакта по фамилии")
+    print("/stop => Выйти из меню команд")
+
+
 
 
 with sq.connect("cont_tel.db") as con:
     cur = con.cursor()
     cur.execute("PRAGMA foreign_keys=True")
-    cur.execute("DROP TABLE IF EXISTS relation")
-    cur.execute("DROP TABLE IF EXISTS telephone")
-    cur.execute("DROP TABLE IF EXISTS users")
+    # cur.execute("DROP TABLE IF EXISTS relation")
+    # cur.execute("DROP TABLE IF EXISTS telephone")
+    # cur.execute("DROP TABLE IF EXISTS users")
+    # cur.execute("DROP TABLE IF EXISTS contacts")
     create_table()
     add_into_empty()
   
 
     while True:
-        command = input("Введите команду: ")
+        command = input("\nВведите команду: ")
         command = command.lower()
         if command == "/all":
             show_all()
@@ -128,6 +197,15 @@ with sq.connect("cont_tel.db") as con:
             con.commit()
         elif command == "/search":
             search_user()
+        elif command == "/del":
+            delete_record()
+        elif command == "/up":
+            update_data()
+        elif command == "/info":
+            print_info()
+
+
+        
 
 
 
@@ -136,11 +214,161 @@ with sq.connect("cont_tel.db") as con:
 
 
 
+# -------------------------------------------------------------------------------------------------------------------------
+
+# def create_table():
+
+#     cur.execute("""CREATE TABLE IF NOT EXISTS users 
+#         (id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         second_n TEXT, 
+#         first_n TEXT
+#         )""")
+
+#     cur.execute("""CREATE TABLE IF NOT EXISTS telephone 
+#         (id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         user_id INTEGER, 
+#         tel_number INTEGER,
+#         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+#         )""")
+
+#     cur.execute("""CREATE TABLE IF NOT EXISTS relation 
+#         (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+#         user_id INTEGER,
+#         relations TEXT,
+#         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+#         )""")
+
+ 
+# def add_into_empty():
+
+#     cur.execute("SELECT * FROM users")
+#     if not cur.fetchall():
+#         cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Klomsel', 'Anton')")
+#         cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Bolgan', 'Mirgo')")
+#         cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Svintel', 'Perui')")
+#         cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Massaya', 'Telka')")
+
+#     cur.execute("SELECT * FROM telephone")
+#     if not cur.fetchall():
+#         cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (1, 89257655664)")
+#         cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (1, 89108761230)")
+#         cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (2, 89163211299)")
+#         cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (3, 89031897645)")
+#         cur.execute("INSERT INTO telephone (user_id, tel_number) VALUES (4, 89104557318)")
+
+#     cur.execute("SELECT * FROM relation")
+#     if not cur.fetchall():
+#         cur.execute("INSERT INTO relation (user_id, relations) VALUES (4, 'friends')")
+#         cur.execute("INSERT INTO relation (user_id, relations) VALUES (2, 'family')")
+#         cur.execute("INSERT INTO relation (user_id, relations) VALUES (1, 'work')")
+#         cur.execute("INSERT INTO relation (user_id, relations) VALUES (3, 'enemy')")
+
+
+# def show_all():
+#     cur.execute("SELECT second_n, first_n, tel_number, relations FROM telephone JOIN users ON telephone.user_id = users.id \
+#         JOIN relation ON telephone.user_id = relation.user_id ORDER BY second_n ASC")
+#     for row in cur:
+#         f = '{0:<8} | {1:<8} | {2:<8} | {3:<5}'.format(*row)
+#         print(f)
+
+
+# def add_user():
+#     surname = input("Введите фамилию пользователя: ").capitalize()
+#     name = input("Введите имя пользователя: ").capitalize()
+#     cur.execute(f"INSERT INTO users VALUES(NULL, '{surname}','{name}')")
+#     last_id = cur.lastrowid
+#     con.commit()
+ 
+#     count_hlp = int(input("Сколько телефонов у пользователя? "))
+#     i = 0
+#     while i < count_hlp:
+#         tel = int(input("Введите номер телефона: "))
+#         cur.execute(f"INSERT INTO telephone (user_id, tel_number) VALUES ({last_id}, {tel})")
+#         i += 1
+
+#     print("Кем вам приходится пользователь \n 1 - friends \n 2 - family \n 3 - work \n 4 - enemy")
+#     rel_hlp = int(input("Введите цифру: "))
+#     while True:
+#         if rel_hlp == 1:
+#             cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'friends')")
+#             break
+#         elif rel_hlp == 2:
+#             cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'family')")
+#             break
+#         elif rel_hlp == 3:
+#             cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'work')")
+#             break
+#         elif rel_hlp == 4:
+#             cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'enemy')")
+#             break
+
+
+# def search_user ():
+#     sec_n = input("Введите фамилию пользователя: ").capitalize()
+#     cur.execute(f"SELECT second_n, first_n, tel_number, relations FROM telephone JOIN users ON telephone.user_id = users.id \
+#         JOIN relation ON telephone.user_id = relation.user_id WHERE second_n = '{sec_n}'")
+#     for row in cur:
+#         f = '{0:<8} | {1:<8} | {2:<8} | {3:<5}'.format(*row)
+#         print(f)
+  
+
+# # def update_tel():
+# #     surname_h = input("Введите фамилию: ")
+# #     new_tel = int(input("Введите новый номер телефона: "))
+# #     cur.execute(f"UPDATE telephone SET tel_number {new_tel} WHERE")
+
+
+# def delete_record():
+#     sur_var = input("Введите фамилию пользователя: ").capitalize()
+#     cur.execute(f"SELECT second_n, first_n, tel_number, relations FROM telephone JOIN users ON telephone.user_id = users.id \
+#         JOIN relation ON telephone.user_id = relation.user_id WHERE second_n = '{sur_var}'")
+#     for row in cur:
+#         f = '{0:<8} | {1:<8} | {2:<8} | {3:<5}'.format(*row)
+#         print(f)
+#     answer = input('Вы точно хотите удалить этого пользователя? Y/N: ').upper()
+#     if answer == 'Y':
+#         cur.execute("DELETE FROM users WHERE second_n = '{sur_var}'")
+#         # cur.execute("DELETE FROM users WHERE second_n = '{sur_var}'")
+#     else: 
+#         return
 
 
 
 
+# with sq.connect("cont_tel.db") as con:
+#     cur = con.cursor()
+#     cur.execute("PRAGMA foreign_keys=True")
+#     cur.execute("DROP TABLE IF EXISTS relation")
+#     cur.execute("DROP TABLE IF EXISTS telephone")
+#     cur.execute("DROP TABLE IF EXISTS users")
+#     create_table()
+#     add_into_empty()
+  
 
+#     while True:
+#         command = input("\nВведите команду: ")
+#         command = command.lower()
+#         if command == "/all":
+#             show_all()
+#         elif command == "/stop":
+#             break
+#         elif command == "/add":
+#             add_user()
+#         elif command == "/save":
+#             con.commit()
+#         elif command == "/search":
+#             search_user()
+#         elif command == "/del":
+#             delete_record()
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+# print ("SQLite Version is:", sq.sqlite_version)
+# print ("DB-API Version is:", sq.version)
 
 
 

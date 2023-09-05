@@ -1,5 +1,5 @@
 import os
-os.system('clear')
+os.system('clr')
 import tkinter as tk
 
 
@@ -32,19 +32,19 @@ def delete_ac():
 
 
 def create_digit_button(digit):
-    return tk.Button(win, text=digit, bd=0, command=lambda: add_digit(digit))
+    return tk.Button(win, text=digit, bd=1, command=lambda: add_digit(digit))
 
 
 def create_operat_button(operation):
-    return tk.Button(win, text=operation, bd=0,command=lambda: add_operation(operation))
+    return tk.Button(win, text=operation, bd=1,command=lambda: add_operation(operation))
 
 
 def create_calc_button(ch_oper):
-    return tk.Button(win, text=ch_oper, bd=0,command=calc_operation)
+    return tk.Button(win, text=ch_oper, bd=1,command=calc_operation)
 
 
 def create_del_button(ch_oper):
-    return tk.Button(win, text=ch_oper, bd=0, command=lambda: delete_ac())
+    return tk.Button(win, text=ch_oper, bd=1, command=lambda: delete_ac())
 
 
 def delete_entry():
