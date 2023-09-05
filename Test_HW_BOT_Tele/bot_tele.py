@@ -15,7 +15,7 @@ def create_table():
 
     cur.execute("""CREATE TABLE IF NOT EXISTS telephone (
         id INTEGER PRIMARY KEY,
-        tel_number INTEGER
+        tel_number INTEGER 
         )""")
 
     cur.execute("""CREATE TABLE IF NOT EXISTS relation (
@@ -41,7 +41,7 @@ def add_into_empty():
         cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Klomsel', 'Anton')")
         cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Bolgan', 'Mirgo')")
         cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Svintel', 'Perui')")
-        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Massaya', 'Telka')")
+        cur.execute("INSERT INTO users (second_n, first_n) VALUES ('Massaya', 'Zerka')")
 
     cur.execute("SELECT * FROM telephone")
     if not cur.fetchall():
@@ -78,31 +78,53 @@ def show_all():
 def add_user():
     surname = input("Введите фамилию пользователя: ").capitalize()
     name = input("Введите имя пользователя: ").capitalize()
-    cur.execute(f"INSERT INTO users VALUES(NULL, '{surname}','{name}')")
+    cur.execute(f"INSERT INTO users VALUES(NULL,'{surname}','{name}')")
     last_id = cur.lastrowid
-    con.commit()
+    cur.execute(f"INSERT INTO contacts (user_id) VALUES ({last_id})")
  
     count_hlp = int(input("Сколько телефонов у пользователя? "))
-    i = 0
-    while i < count_hlp:
+    te_id = cur.lastrowid
+    if count_hlp > 1:
         tel = int(input("Введите номер телефона: "))
-        cur.execute(f"INSERT INTO telephone (tel_number) VALUES ({last_id}, {tel})")
-        i += 1
+        cur.execute(f"INSERT INTO telephone (tel_number) VALUES ({tel})")
+        te_id = cur.lastrowid
+        cur.execute(f"UPDATE contacts SET tel_id = {te_id}  WHERE id = '{te_id}'")
+        i = 0
+        while i < count_hlp:
+            tel = int(input("Введите номер телефона: "))
+            cur.execute(f"INSERT INTO telephone (tel_number) VALUES ({tel})")
+            te_id = cur.lastrowid
+            cur.execute(f"INSERT INTO contacts (user_id) VALUES ({last_id})")
+            cur.execute(f"INSUPDATE contacts SET tel_id = {te_id}  WHERE id = '{te_id}'")
+            i += 1
 
-    print("Кем вам приходится пользователь \n 1 - friends \n 2 - family \n 3 - work \n 4 - enemy")
-    rel_hlp = int(input("Введите цифру: "))
+    elif count_hlp == 1:
+            tel = int(input("Введите номер телефона: "))
+            cur.execute(f"INSERT INTO telephone (tel_number) VALUES ({tel})")
+            cur.execute("SELECT id FROM telephone WHERE id = '{te_id}'")
+            a = cur.fetchone()
+            a = int(a[0])
+            cur.execute(f"INSERT INTO contacts (tel_id) VALUES ({a})")
+            # te_id = cur.lastrowid
+            # cur.execute(f"UPDATE contacts SET tel_id = {te_id}  WHERE id = '{te_id}'")
+    else:
+        return
+    con.commit()
+
+    print("Выберите группу контакта \n 1 - friends \n 2 - family \n 3 - work \n 4 - enemy")
+    rel_hlp = input("Введите цифру: ")
     while True:
-        if rel_hlp == 1:
-            cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'friends')")
+        if rel_hlp == "1":
+            cur.execute(f"UPDATE contacts SET rel_id = '1' WHERE user_id = '{last_id}'")
             break
-        elif rel_hlp == 2:
-            cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'family')")
+        elif rel_hlp == "2":
+            cur.execute(f"UPDATE contacts SET rel_id = '2' WHERE user_id = '{last_id}'")
             break
-        elif rel_hlp == 3:
-            cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'work')")
+        elif rel_hlp == "3":
+            cur.execute(f"UPDATE contacts SET rel_id = '3' WHERE user_id = '{last_id}'")
             break
-        elif rel_hlp == 4:
-            cur.execute(f"INSERT INTO relation (user_id, relations) VALUES ({last_id}, 'enemy')")
+        elif rel_hlp == "4":
+            cur.execute(f"UPDATE contacts SET rel_id = '4' WHERE user_id = '{last_id}'")
             break
 
 
@@ -121,8 +143,8 @@ def update_data():
         if answer == '1':
             sec_n_q = input("Введите фамилию которую хотите изменить: ").capitalize()
             sec_n = input("Введите новую фамилию пользователя: ").capitalize()
-            cur.execute(f"UPDATE users SET second_n = '{sec_n} WHERE second_n = {sec_n_q}'")
-
+            cur.execute(f"UPDATE users SET second_n = '{sec_n}' WHERE second_n = '{sec_n_q}'")
+            continue
         elif answer == '2':
             sec_n = input("Введите фамилию пользователя телефон которого хотите изменить: ").capitalize()
             cur.execute(f"SELECT second_n, first_n, tel_number FROM contacts JOIN users ON contacts.user_id = users.id \
@@ -141,10 +163,6 @@ def update_data():
         elif answer == '0':
             break
     
-    # surname_h = input("Введите фамилию: ")
-    # new_tel = int(input("Введите новый номер телефона: "))
-    # cur.execute(f"UPDATE telephone SET tel_number {new_tel} WHERE")
-
 
 def delete_record():
     sec_n = input("Введите фамилию пользователя: ").capitalize()
@@ -169,6 +187,15 @@ def print_info():
     print("/save => Сохранить внесенные изменения")
     print("/search => Поиск контакта по фамилии")
     print("/stop => Выйти из меню команд")
+    print("Специфические команды:\n/sec -> Удаляет все таблицы\n/adm -> Создает заново таблицы и заполняет их")
+
+
+
+def secret_command():
+    cur.execute("DROP TABLE IF EXISTS contacts")
+    cur.execute("DROP TABLE IF EXISTS users")
+    cur.execute("DROP TABLE IF EXISTS telephone")
+    cur.execute("DROP TABLE IF EXISTS relation")
 
 
 
@@ -176,10 +203,6 @@ def print_info():
 with sq.connect("cont_tel.db") as con:
     cur = con.cursor()
     cur.execute("PRAGMA foreign_keys=True")
-    # cur.execute("DROP TABLE IF EXISTS relation")
-    # cur.execute("DROP TABLE IF EXISTS telephone")
-    # cur.execute("DROP TABLE IF EXISTS users")
-    # cur.execute("DROP TABLE IF EXISTS contacts")
     create_table()
     add_into_empty()
   
@@ -203,6 +226,12 @@ with sq.connect("cont_tel.db") as con:
             update_data()
         elif command == "/info":
             print_info()
+        elif command == "/sec":
+            secret_command()
+        elif command == "/adm":
+            create_table()
+            add_into_empty()
+
 
 
         
