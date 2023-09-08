@@ -1,9 +1,14 @@
 import os
-os.system('clr')
+os.system("cls")
 import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter import *
+from tkinter.ttk import *
+import math
 
+# Доделать факториал
+# Доделать знаки
 
-# ----------------ПОДУМАТЬ--------------КАК ПЕРЕД ТОЧКОЙ ОСТАВИТЬ 0
 def add_digit(digit):
     value = calc.get()
     if value[0] == '0':
@@ -14,16 +19,44 @@ def add_digit(digit):
 
 def add_operation(operation):
     value = calc.get()
-    if value[-1] in ('+', '-', '/', '*', '%'):
-        value = value[: -1]
+    if value[-1] in ("+","-","/","*","%"):
+        value = value[:-1]
     calc.delete(0, tk.END)
     calc.insert(0, value + operation)
+
 
 
 def calc_operation():
     value = calc.get()
     calc.delete(0, tk.END)
-    calc.insert(0, eval(value))
+    res_h = eval(value)
+    if res_h % 1 == 0:
+        res_h = int(res_h)
+        calc.insert(0, res_h)
+    calc.insert(0, res_h)
+
+# ----------------------------- DO
+# def sign_operation():               
+#     value = calc.get() 
+#     print(type(value)) 
+#     calc.delete(0, tk.END)
+#     calc.insert(0, value)
+
+
+def fct_func(num):
+    num = calc.get()
+    if num == 0 or num == 1:
+        return 1
+    else:
+        return num * fct_func(num - 1)
+
+
+def fact_show():
+    number = calc.get()+"!"
+    print(number)
+    number = int(number[:-1])
+    calc.delete(0, END)
+    calc.insert(0, fct_func(number) )
 
 
 def delete_ac():
@@ -32,69 +65,127 @@ def delete_ac():
 
 
 def create_digit_button(digit):
-    return tk.Button(win, text=digit, bd=1, command=lambda: add_digit(digit))
+    return ttk.Button(win, text=digit, command=lambda: add_digit(digit))
 
 
 def create_operat_button(operation):
-    return tk.Button(win, text=operation, bd=1,command=lambda: add_operation(operation))
+    return ttk.Button(win, text=operation,command=lambda: add_operation(operation))
+
+
+# def create_sign_button(sign):
+#     return ttk.Button(win, text=sign, command=sign_operation)
 
 
 def create_calc_button(ch_oper):
-    return tk.Button(win, text=ch_oper, bd=1,command=calc_operation)
+    return ttk.Button(win, text=ch_oper,command=calc_operation)
 
 
 def create_del_button(ch_oper):
-    return tk.Button(win, text=ch_oper, bd=1, command=lambda: delete_ac())
+    return ttk.Button(win, text=ch_oper, command=lambda: delete_ac())
 
 
 def delete_entry():
-    calc.delete(0, tk.END)
+    calc.delete(0, ttk.END)
+
+
+def create_entry(col):
+        calc.grid(row=0,column=0, columnspan=col, stick='wens', padx=1, pady=1)   
+
+
+def engin_but():
+    global count
+    if count % 2 == 0:
+        win.geometry('280x200+1000+200')
+        create_entry(7)
+    else:
+        win.geometry('160x200+1000+200')
+        create_entry(4)  
+    count+=1
+
+
+def crt_swtch_for_engn(operation):
+    return ttk.Button(win, text=operation, command=lambda: engin_but())
+
+
+def crt_but_for_engin(operation):
+    return ttk.Button(win, text=operation, command=lambda:add_operation(operation) )
+
+
+def crt_but_fact(operation):
+    return ttk.Button(win, text=operation, command=fact_show)
 
 
 win = tk.Tk()
 win.title('Калькулятор')
 photo = tk.PhotoImage(file='fun.png')
 win.iconphoto(False, photo)
-win.geometry('300x350+600+200')
-win.config(bg='#ABE4DC')
+win.resizable(width=False, height=False)
+win.geometry('160x200+1000+200')
+win.config(bg='#bbd5fc')
+count = 0
 
-calc = tk.Entry(win, justify=tk.RIGHT, font=('Arial', 24), width=20)
+calc = tk.Entry(win, relief = RAISED, justify=tk.RIGHT, font=('Arial', 18), width=20 )
 calc.insert(0, '0')
-calc.grid(row=0,column=0, columnspan=4, stick='wens')
+calc.grid(row=0,column=0, columnspan=4, stick='wens', padx=1, pady=1)
+
+create_del_button('AC').grid(row=1, column=0, stick='wens', padx=1, pady=1)
+create_digit_button('1').grid(row=4, column=0, stick='wens', padx=1, pady=1)
+create_digit_button('2').grid(row=4, column=1, stick='wens', padx=1, pady=1)
+create_digit_button('3').grid(row=4, column=2, stick='wens', padx=1, pady=1)
+create_digit_button('4').grid(row=3, column=0, stick='wens', padx=1, pady=1)
+create_digit_button('5').grid(row=3, column=1, stick='wens', padx=1, pady=1)
+create_digit_button('6').grid(row=3, column=2, stick='wens', padx=1, pady=1)
+create_digit_button('7').grid(row=2, column=0, stick='wens', padx=1, pady=1)
+create_digit_button('8').grid(row=2, column=1, stick='wens', padx=1, pady=1)
+create_digit_button('9').grid(row=2, column=2, stick='wens', padx=1, pady=1)
+create_digit_button('0').grid(row=5, column=0, columnspan=2, sticky='wens', padx=1, pady=1)
+create_digit_button('.').grid(row=5, column=2, stick='wens', padx=1, pady=1)
+create_operat_button('*').grid(row=2, column=3, stick='wens', padx=1, pady=1)
+create_operat_button('-').grid(row=3, column=3, stick='wens', padx=1, pady=1)
+create_operat_button('+').grid(row=4, column=3, stick='wens', padx=1, pady=1)
+create_operat_button('/').grid(row=1, column=3, stick='wens', padx=1, pady=1)
+# create_sign_button('+/-').grid(row=1, column=1, stick='wens', padx=1, pady=1)
+create_calc_button('=').grid(row=5, column=3, stick='wens', padx=1, pady=1)
+crt_swtch_for_engn('Engn').grid(row=1, column=2, stick='wens', padx=1, pady=1)
+
+# Scientific Calculator
+crt_but_for_engin('sin').grid(row=1, column=4, stick='wens', padx=1, pady=1)
+crt_but_for_engin('cos').grid(row=1, column=5, stick='wens', padx=1, pady=1)
+crt_but_for_engin('tan').grid(row=1, column=6, stick='wens', padx=1, pady=1)
+crt_but_for_engin('%').grid(row=4, column=4, stick='wens', padx=1, pady=1)
+# x^2 ; x^ 3
+crt_but_for_engin('x\u00B2').grid(row=2, column=4, stick='wens', padx=1, pady=1)     
+crt_but_for_engin('x\u00B3').grid(row=2, column=5, stick='wens', padx=1, pady=1)
+crt_but_for_engin('x\u207F').grid(row=2, column=6, stick='wens', padx=1, pady=1)
+crt_but_for_engin('\u00B2\u221A').grid(row=3, column=4, stick='wens', padx=1, pady=1)
+crt_but_for_engin('\u00B3\u221A').grid(row=3, column=5, stick='wens', padx=1, pady=1)
+crt_but_for_engin('log').grid(row=3, column=6, stick='wens', padx=1, pady=1)
+crt_but_for_engin('\u03C0').grid(row=4, column=6, stick='wens', padx=1, pady=1)
+crt_but_fact('n!').grid(row=4, column=5, stick='wens', padx=1, pady=1)
+crt_but_for_engin('(').grid(row=5, column=4, stick='wens', padx=1, pady=1)
+crt_but_for_engin(')').grid(row=5, column=5, stick='wens', padx=1, pady=1)
+crt_but_for_engin('2\u03C0').grid(row=5, column=6, stick='wens', padx=1, pady=1)
+
+win.grid_columnconfigure(0, weight=30, minsize= 40)
+win.grid_columnconfigure(1, weight=30, minsize= 40)
+win.grid_columnconfigure(2, weight=30, minsize= 40)
+win.grid_columnconfigure(3, weight=30, minsize= 40)
+win.grid_columnconfigure(4, weight=30, minsize= 40)
+win.grid_columnconfigure(5, weight=30, minsize= 40)
+win.grid_columnconfigure(6, weight=30, minsize= 40)
+
+win.rowconfigure(0, minsize= 50)
+win.rowconfigure(1, minsize= 30)
+win.rowconfigure(2, minsize= 30)
+win.rowconfigure(3, minsize= 30)
+win.rowconfigure(4, minsize= 30)
+win.rowconfigure(5, minsize= 30)
 
 
-create_del_button('AC').grid(row=1, column=0, stick='wens')
-create_digit_button('1').grid(row=4, column=0, stick='wens')
-create_digit_button('2').grid(row=4, column=1, stick='wens')
-create_digit_button('3').grid(row=4, column=2, stick='wens')
-create_digit_button('4').grid(row=3, column=0, stick='wens')
-create_digit_button('5').grid(row=3, column=1, stick='wens')
-create_digit_button('6').grid(row=3, column=2, stick='wens')
-create_digit_button('7').grid(row=2, column=0, stick='wens')
-create_digit_button('8').grid(row=2, column=1, stick='wens')
-create_digit_button('9').grid(row=2, column=2, stick='wens')
-create_digit_button('0').grid(row=5, column=0, columnspan=2, sticky='wens')
-create_digit_button('.').grid(row=5, column=2, stick='wens')
-create_operat_button('*').grid(row=2, column=3, stick='wens')
-create_operat_button('-').grid(row=3, column=3, stick='wens')
-create_operat_button('+').grid(row=4, column=3, stick='wens')
-create_operat_button('/').grid(row=1, column=3, stick='wens')
-create_operat_button('%').grid(row=1, column=2, stick='wens')
-create_operat_button('+/-').grid(row=1, column=1, stick='wens')
-create_calc_button('=').grid(row=5, column=3, stick='wens')
-# create_button('Super Power!').grid(row=6, column=0,columnspan=4, stick='wens')
 
-win.grid_columnconfigure(0, minsize=90)
-win.grid_columnconfigure(1, minsize=70)
-win.grid_columnconfigure(2, minsize=70)
-win.grid_columnconfigure(3, minsize=70)
 
-win.rowconfigure(0, minsize= 73)
-win.rowconfigure(1, minsize= 46)
-win.rowconfigure(2, minsize= 46)
-win.rowconfigure(3, minsize= 46)
-win.rowconfigure(4, minsize= 46)
-win.rowconfigure(5, minsize= 46)
-win.rowconfigure(6, minsize= 46)
 
+
+
+# win.update()
 win.mainloop()

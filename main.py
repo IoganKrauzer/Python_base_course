@@ -1,298 +1,266 @@
-# Даны два многочлена, которые вводит пользователь.
-# Задача - сформировать многочлен, содержащий сумму многочленов.
-# Степени многочленов могут быть разные.
-
-# например на входе 2x^2 + 4x + 5 = 0 и 5x^3 - 3*x^2 - 12 = 0
-# на выходе будет 5x^3 - x^2 + 4х - 7 = 0
-# можно использовать модуль re
-import random
-import os
-os.system('cls')
-
-
-_digit = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-# indx_list_1 = [3, 2, 1, 0]                # ПОКА НЕ ИСПОЛЬЗУЕМ
-# indx_list_2 = [4, 3, 2, 1, 0]
-
-# polyn_list_1 = [1, 5, 6, 4]
-# polyn_list_2 = [4, 3, 0, 6, 7]
-
-# polyn_str_1 = "x^3 - 5x^2 - 6x - 4 = 0"     # С ПРОБЕЛАМИ
-# polyn_str_2 = "4x^4 - 3x^3 + 6x + 7 = 0"
-
-# polyn_str_1 = "x^3-5x^2-6x-4=0"
-# polyn_str_2 = "4x^4-3x^3+6x+7=0"
-
-# polyn_str_1 = []
-# count_helper = 0
-# for i in polyn_str_1:
-#     polyn_str_1.append(i)
-
-# list_for_polyn2 = []
-# count_helper = 0
-# for i in polyn_str_2:
-#     list_for_polyn2.append(i)
-
-
-
-def create_indx_lists(polyn_str_l):                # ИНДЕКСЫ ЛИСТ
-    _polyn_indx = []
-    for i in range (len(polyn_str_l) - 1):
-        if polyn_str_l[i] == "^":
-            _polyn_indx.append(polyn_str_l[i+1])
-        elif polyn_str_l[i - 1] == "x":
-            _polyn_indx.append('1')
-        elif polyn_str_l[i + 1] == "=" :
-            _polyn_indx.append('0')
-
-    if _polyn_indx[0] != len(_polyn_indx) - 1:             
-        _polyn_indx_checked = []
-        k = 0
-        up_degree = int(_polyn_indx[0])
-        while k <= up_degree:
-            _polyn_indx_checked.insert(0, k)
-            k += 1
-        return _polyn_indx_checked
-    return _polyn_indx
-    
-
-
-# def create_coef_list (polyn_str_l, indx_list):
-#     list_for_coef = []
-#     for i in range (len(polyn_str_l) - 1):
-#         if polyn_str_l[i + 1] == "x" or polyn_str_l[i + 1] == "=" or polyn_str_l[i] == "+" or polyn_str_l[i] == "-":
-#             list_for_coef.append(polyn_str_l[i])
-#         elif polyn_str_l[i] == "x" and i == 0:
-#             list_for_coef.append('1')
-#     return list_for_coef
-
-# def create_coef_list (polyn_str_l, indx_list):
-#     list_for_coef = []
-#     _check_count = 0
-    
-#     for i in range (len(polyn_str_l) - 1):
-#         if polyn_str_l[i + 1] == "x" or polyn_str_l[i + 1] == "=" :
-#             list_for_coef.append(polyn_str_l[i])
-#         elif polyn_str_l[i] == "x" and i == 0 or polyn_str_l[i] == "x" and polyn_str_l[i+1] != "^" :
-#             list_for_coef.append('1')
-#         elif 
-#         count += 1
-#     return list_for_coef
-# -----------------------------------------------------------------------------------------------------
-
-def create_coef_list (polyn_str_l, indx_list):
-    list_for_coef = []
-    _check_count = 0
-    _check_char = ['+', '-']
-    for i in indx_list:
-        num_check = f"^{i}"
-        if i == 0:
-            for k in range (len(polyn_str_l) - 1):
-                if polyn_str_l[k + 1] == "=" and polyn_str_l[k -1] != "^" or polyn_str_l[k + 1] == "=" and polyn_str_l[k] != "x":
-                    list_for_coef.insert(_check_count, polyn_str_l[k])
-                    break
-                elif polyn_str_l[k + 1] == "=" and polyn_str_l[k] == "x":
-                    list_for_coef.insert(_check_count, '0')
-                    break
-                
-        elif i == 1:
-            for j in range (len(polyn_str_l) - 1):
-                if polyn_str_l[j + 1] in _check_char and polyn_str_l[j] == "x":
-                    if polyn_str_l[j - 1] in _check_char:
-                        list_for_coef.append("1")
-                    else:
-                        list_for_coef.append(polyn_str_l[j - 1])
-                    break
-
-        elif num_check in polyn_str_l:
-            for p in range (len(polyn_str_l) - 1):
-                if polyn_str_l[p + 1] == '^' and polyn_str_l[p + 2] == f'{i}':
-                    if p == 0 or p != 0 and polyn_str_l[p - 1] in _check_char: 
-                        list_for_coef.append("1")
-                        break
-                    else:
-                        list_for_coef.append(polyn_str_l[p - 1])
-                        break
-
-        elif num_check not in polyn_str_l:
-            list_for_coef.append("0")
-        
-        _check_count += 1
-
-    return list_for_coef
-
-
-                         
-
-                                                                            # 4x^4
-
-
-
-                  
-
-
-
-#                                                         4x^4-3x^3+6x+7=0
-#                                                         6x^2=0
-#                                                         6x=0
-
-
-
-# -----------------------------------------------------------------------------------------------------
-# def create_coef_list (polyn_str_l, indx_list):
-   
-#     def help_with_check_count(count, indx_list):
-#         if count < len(indx_list) - 1:
-#             count += 1
-#             return count
-#         return count
-
-#     list_for_coef = []
-#     _check_count = 0
-#     for i in range (0, len(polyn_str_l) - 1):
-#         _help_char = f"^{indx_list[_check_count]}"
-#         if polyn_str_l[i + 1] == "x" or polyn_str_l[i + 1] == "=" :
-#             list_for_coef.append(polyn_str_l[i]) 
-#             _check_count = help_with_check_count(_check_count, indx_list)
-#             continue
-        
-#         elif polyn_str_l[i] == "x" and i == 0 or polyn_str_l[i] == "x" and polyn_str_l[i+1] != "^":
-#             list_for_coef.append('1')
-#             _check_count = help_with_check_count(_check_count, indx_list)
-#             continue
-#             # print(list_for_coef[_check_count])
-#         elif _help_char not in polyn_str_l and indx_list[_check_count] > 1:
-#             list_for_coef.append('0')
-#             _check_count = help_with_check_count(_check_count, indx_list)
-#             continue
-#     return list_for_coef
-# -----------------------------------------------------------------------------------------------------
-#                "x^3-5x^2-6x-4=0"  --- МНОГОЧЛЕН 1
-#                "4x^4-3x^3+6x+7=0" --- МНОГОЧЛЕН 2      4x^4-3x^3+6x+7=0
-#                                                         6x^2=0
-#                                                         6x=0
-
-#                [3, 2, 1, 0]       --- ИНДЕКСЫ 1        [4, 3, 2, 1, 0]
-#                [4, 3, 2, 1, 0]    --- ИНДЕКСЫ 2        [4, 3, 0, 6, 7]
-# polyn_list_1 = [1, 5, 6, 4]       --- КОЭФ 1
-# polyn_list_2 = [4, 3, 0, 6, 7]    --- КОЭФ 1
-
-polyn_str_1 = "x^3-5x^2-6x-4=0"
-polyn_str_2 = "4x^4-3x^3+6x+7=0"
-# indx_l_1 = create_indx_lists(polyn_str_1)
-indx_l_1 = [3, 2, 1, 0]
-# indx_l_2 = create_indx_lists(polyn_str_2)
-indx_l_2 = [4, 3, 2, 1, 0]
-# print(indx_l_1)
-# print(indx_l_2)
-polyn_coef_list_1 = create_coef_list (polyn_str_1, indx_l_1)
-polyn_coef_list_2 = create_coef_list (polyn_str_2, indx_l_2)
-print(polyn_coef_list_1)
-print(polyn_coef_list_2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-# --------------------------
-
-# print(polyn_str_1)
-# print(list_for_polyn2)
-# print(list_for_coef)
-# print(list_for_coef_2)
-# --------------------------
-# def create_indx_lists(polyn_str_l):
-#     _polyn_indx = []
-#     for i in range (len(polyn_str_l) - 1):
-#         if polyn_str_l[i] == "^":
-#             _polyn_indx.append(polyn_str_l[i+1])
-#         elif polyn_str_l[i - 1] == "x":
-#             _polyn_indx.append('1')
-#         elif polyn_str_l[i + 1] == "=" :
-#             _polyn_indx.append('0')
-
-#     if _polyn_indx[0] != len(_polyn_indx) - 1:             
-#         _polyn_indx_checked = []
-#         k = 0
-#         up_degree = int(_polyn_indx[0])
-#         while k <= up_degree:
-#             _polyn_indx_checked.insert(0, k)
-#             k += 1
-#         return _polyn_indx_checked
-#     return _polyn_indx
-
-# indx_l_1 = create_indx_lists(polyn_str_1)
-# indx_l_2 = create_indx_lists(polyn_str_2)
-# print(indx_l_1)
-# print(indx_l_2)
-
-
-
-
-
-
-# polyn_str_1 = "x^3-5x^2-6x-4=0"
-# polyn_str_2 = "4x^4-3x^3+6x+7=0"
-
-
-
-#                           --------------------------------------
-#                              [1, 5, 6, 4]    "x^3-5x^2-6x-4=0"
-#                              [4, 3, 0, 6, 7] "4x^4-3x^3+6x+7=0"
-#                           --------------------------------------
-
-
-
-# for i in range (len(polyn_str_1) -1, -1, -1):
-#     if polyn_str_1[i] == "0" or polyn_str_1[i] == "=" or polyn_str_1[i] == "+" or polyn_str_1[i] == "-":
-#         polyn_str_1.insert(count_helper, polyn_str_1[i])
-#     count_helper += 1
-    
-
-
-
-# for i in range (len(polyn_str_1) - 1, -1, -1):
-#     print(polyn_str_1[i])
-
-
-
-
-
-
-
-
-
-
-# def index_list (l_list):
-#     l_degree = []
-#     for i in range (len(l_list) - 1, - 1, -1):
-#         l_degree.append(i)
-#     return l_degree
-    
-
-
-
-# polyn_list_1 = [8, 10, 4, 0, 9, 9]
-# polyn_list_2 = [0, 0, 4, 4, 5, 1]
-
-# polyn_str_1 = "8x^5 - 10x^4 - 4x^3 - 9x - 9 = 0"
-# polyn_str_2 = "4x^3 + 4x^2 - 5x + 1 = 0"
-# print(polyn_str_1)
-# print(polyn_str_2)
-# indx_list_1 = index_list (polyn_list_1)
-# indx_list_2 = index_list (polyn_list_2)
-# print(indx_list_1)
-# print(indx_list_2)
-
-#[0,8,1,10]  - >  8*x^2 + x +10 = 0
-# 0 1 2 3  => index
-# 3 2 1 0  => defree
+from tkinter import *
+import math
+import numpy 
+
+'''
+Functions
+'''
+# Function to add in the entry of text display
+def button_click(char):
+    global calc_operator
+    calc_operator += str(char)
+    text_input.set(calc_operator)
+
+# Function to clear the whole entry of text display
+def button_clear_all():
+    global calc_operator
+    calc_operator = ""
+    text_input.set("")
+
+# Function to delete one by one from the last in the entry of text display
+def button_delete():
+    global calc_operator
+    text = calc_operator[:-1]
+    calc_operator = text
+    text_input.set(text)
+
+# Function to calculate the factorial of a number
+def factorial(n):
+    if n==0 or n==1:
+        return 1
+    else:
+        return n*factorial(n-1)
+
+def fact_func():
+    global calc_operator
+    result = str(factorial(int(calc_operator)))
+    calc_operator = result
+    text_input.set(result)
+
+# Function to calculate trigonometric numbers of an angle
+def trig_sin():
+    global calc_operator
+    result = str(math.sin(math.radians(int(calc_operator))))
+    calc_operator = result
+    text_input.set(result)
+
+def trig_cos():
+    global calc_operator
+    result = str(math.cos(math.radians(int(calc_operator))))
+    calc_operator = result
+    text_input.set(result)
+
+def trig_tan():
+    global calc_operator
+    result = str(math.tan(math.radians(int(calc_operator))))
+    calc_operator = result
+    text_input.set(result)
+
+def trig_cot():
+    global calc_operator
+    result = str(1/math.tan(math.radians(int(calc_operator))))
+    calc_operator = result
+    text_input.set(result)
+
+# Function to find the square root of a number
+def square_root():
+    global calc_operator
+    if int(calc_operator)>=0:
+        temp = str(eval(calc_operator+'**(1/2)'))
+        calc_operator = temp
+    else:
+        temp = "ERROR"
+    text_input.set(temp)
+
+# Function to find the third root of a number
+def third_root():
+    global calc_operator
+    if int(calc_operator)>=0:
+        temp = str(eval(calc_operator+'**(1/3)'))
+        calc_operator = temp
+    else:
+        temp = "ERROR"
+    text_input.set(temp)
+
+# Function to change the sign of number
+def sign_change():
+    global calc_operator
+    if calc_operator[0]=='-':
+        temp = calc_operator[1:]
+    else:
+        temp = '-'+calc_operator
+    calc_operator = temp
+    text_input.set(temp)    
+
+# Function to calculate the percentage of a number
+def percent():
+    global calc_operator
+    temp = str(eval(calc_operator+'/100'))
+    calc_operator = temp
+    text_input.set(temp)
+
+# Funtion to find the result of an operation
+def button_equal():
+    global calc_operator
+    temp_op = str(eval(calc_operator))
+    text_input.set(temp_op)
+    calc_operator = temp_op
+
+'''
+Variables
+'''
+sin, cos, tan = math.sin, math.cos, math.tan
+log, ln = math.log10, math.log
+e = math.exp
+p = math.pi
+E = '*10**'
+
+tk_calc = Tk()
+tk_calc.configure(bg="#293C4A", bd=10)
+tk_calc.title("Scientific Calculator")
+
+calc_operator = ""
+text_input = StringVar()
+
+text_display = Entry(tk_calc, font=('sans-serif', 20, 'bold'), textvariable=text_input,
+                     bd=5, insertwidth = 5, bg='#BBB', justify='right').grid(columnspan=5, padx = 10, pady = 15)
+
+button_params = {'bd':5, 'fg':'#BBB', 'bg':'#3C3636', 'font':('sans-serif', 20, 'bold')}
+button_params_main = {'bd':5, 'fg':'#000', 'bg':'#BBB', 'font':('sans-serif', 20, 'bold')}
+
+'''
+Buttons
+'''
+#--1st row--
+# Absolute value of a number
+abs_value = Button(tk_calc, button_params, text='abs',
+                   command=lambda:button_click('abs(')).grid(row=1, column=0, sticky="nsew")
+# Remainder of a division
+modulo = Button(tk_calc, button_params, text='mod',
+                command=lambda:button_click('%')).grid(row=1, column=1, sticky="nsew")
+# Integer division quotient
+int_div = Button(tk_calc, button_params, text='div',
+                 command=lambda:button_click('//')).grid(row=1, column=2, sticky="nsew")
+# Factorial of a number
+factorial_button = Button(tk_calc, button_params, text='x!',
+                   command=fact_func).grid(row=1, column=3, sticky="nsew")
+# Euler's number e
+eulers_num = Button(tk_calc, button_params, text='e',
+                    command=lambda:button_click(str(math.exp(1)))).grid(row=1, column=4, sticky="nsew")
+
+#--2nd row--
+# Sine of an angle in degrees
+sine = Button(tk_calc, button_params, text='sin',
+             command=trig_sin).grid(row=2, column=0, sticky="nsew")
+# Cosine of an angle in degrees
+cosine = Button(tk_calc, button_params, text='cos',
+             command=trig_cos).grid(row=2, column=1, sticky="nsew")
+# Tangent of an angle in degrees
+tangent = Button(tk_calc, button_params, text='tan',
+             command=trig_tan).grid(row=2, column=2, sticky="nsew")
+# Cotangent of an angle in degrees
+cotangent = Button(tk_calc, button_params, text='cot',
+             command=trig_cot).grid(row=2, column=3, sticky="nsew")
+# Pi(3.14...) number 
+pi_num = Button(tk_calc, button_params, text='π',
+                command=lambda:button_click(str(math.pi))).grid(row=2, column=4, sticky="nsew")
+
+#--3rd row--
+# Power of 2
+second_power = Button(tk_calc, button_params, text='x\u00B2',
+             command=lambda:button_click('**2')).grid(row=3, column=0, sticky="nsew")
+# Power of 3
+third_power = Button(tk_calc, button_params, text='x\u00B3',
+             command=lambda:button_click('**3')).grid(row=3, column=1, sticky="nsew")
+# Power of n
+nth_power = Button(tk_calc, button_params, text='x^n',
+             command=lambda:button_click('**')).grid(row=3, column=2, sticky="nsew")
+# Inverse number
+inv_power = Button(tk_calc, button_params, text='x\u207b\xb9',
+             command=lambda:button_click('**(-1)')).grid(row=3, column=3, sticky="nsew")
+# Powers of 10
+tens_powers = Button(tk_calc, button_params, text='10^x', font=('sans-serif', 15, 'bold'),
+                     command=lambda:button_click('10**')).grid(row=3, column=4, sticky="nsew")
+
+#--4th row--
+# Square root of a number
+square_root = Button(tk_calc, button_params, text='\u00B2\u221A',
+                     command=square_root).grid(row=4, column=0, sticky="nsew")
+# Third root of a number
+third_root = Button(tk_calc, button_params, text='\u00B3\u221A',
+                    command=third_root).grid(row=4, column=1, sticky="nsew")
+# nth root of a number
+nth_root = Button(tk_calc, button_params, text='\u221A',
+                  command=lambda:button_click('**(1/')).grid(row=4, column=2, sticky="nsew")
+# Logarithm of a number with base 10
+log_base10 = Button(tk_calc, button_params, text='log\u2081\u2080', font=('sans-serif', 16, 'bold'),
+                   command=lambda:button_click('log(')).grid(row=4, column=3, sticky="nsew")
+# Logarithm of a number with base e (ln)
+log_basee = Button(tk_calc, button_params, text='ln',
+                   command=lambda:button_click('ln(')).grid(row=4, column=4, sticky="nsew")
+
+#--5th row--
+# Add a left parentheses
+left_par = Button(tk_calc, button_params, text='(',
+                  command=lambda:button_click('(')).grid(row=5, column=0, sticky="nsew")
+# Add a right parentheses
+right_par = Button(tk_calc, button_params, text=')',
+                   command=lambda:button_click(')')).grid(row=5, column=1, sticky="nsew")   
+# Change the sign of a number
+signs = Button(tk_calc, button_params, text='\u00B1',
+               command=sign_change).grid(row=5, column=2, sticky="nsew")
+# Transform number to percentage
+percentage = Button(tk_calc, button_params, text='%',
+               command=percent).grid(row=5, column=3, sticky="nsew")
+# Calculate the function e^x
+ex = Button(tk_calc, button_params, text='e^x',
+               command=lambda:button_click('e(')).grid(row=5, column=4, sticky="nsew")
+
+#--6th row--
+button_7 = Button(tk_calc, button_params_main, text='7',
+                  command=lambda:button_click('7')).grid(row=6, column=0, sticky="nsew")
+button_8 = Button(tk_calc, button_params_main, text='8',
+                  command=lambda:button_click('8')).grid(row=6, column=1, sticky="nsew")
+button_9 = Button(tk_calc, button_params_main, text='9',
+                  command=lambda:button_click('9')).grid(row=6, column=2, sticky="nsew")
+delete_one = Button(tk_calc, bd=5, fg='#000', font=('sans-serif', 20, 'bold'),
+              text='DEL', command=button_delete, bg='#db701f').grid(row=6, column=3, sticky="nsew")
+delete_all = Button(tk_calc, bd=5, fg='#000', font=('sans-serif', 20, 'bold'),
+              text='AC', command=button_clear_all, bg='#db701f').grid(row=6, column=4, sticky="nsew")
+
+#--7th row--
+button_4 = Button(tk_calc, button_params_main, text='4',
+                  command=lambda:button_click('4')).grid(row=7, column=0, sticky="nsew")
+button_5 = Button(tk_calc, button_params_main, text='5',
+                  command=lambda:button_click('5')).grid(row=7, column=1, sticky="nsew")
+button_6 = Button(tk_calc, button_params_main, text='6',
+                  command=lambda:button_click('6')).grid(row=7, column=2, sticky="nsew")
+mul = Button(tk_calc, button_params_main, text='*',
+             command=lambda:button_click('*')).grid(row=7, column=3, sticky="nsew")
+div = Button(tk_calc, button_params_main, text='/',
+             command=lambda:button_click('/')).grid(row=7, column=4, sticky="nsew")
+
+#--8th row--
+button_1 = Button(tk_calc, button_params_main, text='1',
+                  command=lambda:button_click('1')).grid(row=8, column=0, sticky="nsew")
+button_2 = Button(tk_calc, button_params_main, text='2',
+                  command=lambda:button_click('2')).grid(row=8, column=1, sticky="nsew")
+button_3 = Button(tk_calc, button_params_main, text='3',
+                  command=lambda:button_click('3')).grid(row=8, column=2, sticky="nsew")
+add = Button(tk_calc, button_params_main, text='+',
+             command=lambda:button_click('+')).grid(row=8, column=3, sticky="nsew")
+sub = Button(tk_calc, button_params_main, text='-',
+             command=lambda:button_click('-')).grid(row=8, column=4, sticky="nsew")
+
+#--9th row--
+button_0 = Button(tk_calc, button_params_main, text='0',
+                  command=lambda:button_click('0')).grid(row=9, column=0, sticky="nsew")
+point = Button(tk_calc, button_params_main, text='.',
+               command=lambda:button_click('.')).grid(row=9, column=1, sticky="nsew")
+exp = Button(tk_calc, button_params_main, text='EXP', font=('sans-serif', 16, 'bold'),
+             command=lambda:button_click(E)).grid(row=9, column=2, sticky="nsew")
+equal = Button(tk_calc, button_params_main, text='=',
+               command=button_equal).grid(row=9, columnspan=2, column=3, sticky="nsew")
+
+
+tk_calc.mainloop()
